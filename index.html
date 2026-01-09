@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Calculator - English Program</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, #1a237e, #283593);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: #ffeb3b;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .program-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 8px 0;
+        }
+
+        .school-name {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .developer-name {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-top: 15px;
+            font-weight: 600;
+            background: linear-gradient(90deg, #ff9800, #ffeb3b, #4caf50, #2196f3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 300% 100%;
+            animation: gradientFlow 3s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step-title {
+            font-size: 1.8rem;
+            color: #1a237e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8eaf6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            border-color: #1a237e;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 160px;
+        }
+
+        button i {
+            margin-right: 8px;
+        }
+
+        .btn-next {
+            background-color: #1a237e;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background-color: #283593;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(26, 35, 126, 0.2);
+        }
+
+        .btn-prev {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-prev:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-calculate {
+            background-color: #1a237e;
+            color: white;
+        }
+
+        .btn-calculate:hover {
+            background-color: #283593;
+            transform: translateY(-2px);
+        }
+
+        .student-info {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #1a237e;
+        }
+
+        .tasks-container {
+            margin-top: 20px;
+        }
+
+        .task-item {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #1a237e;
+        }
+
+        .task-title {
+            font-size: 1.2rem;
+            color: #1a237e;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .score-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .results-section {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .results-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #e8eaf6, #f3e5f5);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1a237e;
+            margin: 10px 0;
+        }
+
+        .result-grade {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #4caf50;
+        }
+
+        .task-results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .task-results-table th {
+            background-color: #1a237e;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .task-results-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .task-results-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .grade-table th {
+            background-color: #1a237e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .grade-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .grade-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .grade-table tr.highlight {
+            background-color: #e8f5e9;
+            font-weight: 600;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .step-circle.active {
+            background-color: #1a237e;
+            color: white;
+        }
+
+        .step-line {
+            width: 80px;
+            height: 3px;
+            background-color: #e0e0e0;
+        }
+
+        .step-line.active {
+            background-color: #1a237e;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Disclaimer Section */
+        .disclaimer-section {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin-top: 40px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #5d4037;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .disclaimer-title {
+            font-weight: 600;
+            color: #d84315;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .disclaimer-text {
+            margin-bottom: 10px;
+        }
+
+        .generated-by {
+            font-style: italic;
+            color: #1a237e;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .school-footer {
+            color: #283593;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .purpose-note {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            .main-title {
+                font-size: 2.2rem;
+            }
+            
+            .score-inputs {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .results-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .student-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .step-line {
+                width: 40px;
+            }
+            
+            .task-results-table th, .task-results-table td {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="main-title">GRADE CALCULATOR</div>
+            <div class="program-name">English Program</div>
+            <div class="school-name">Satri Nakhon Sawan School</div>
+            <div class="developer-name">Created by Arslan</div>
+        </header>
+        
+        <div class="content">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step-circle active">1</div>
+                <div class="step-line"></div>
+                <div class="step-circle">2</div>
+                <div class="step-line"></div>
+                <div class="step-circle">3</div>
+            </div>
+            
+            <!-- Step 1: Student Information -->
+            <div class="step active" id="step1">
+                <h2 class="step-title">Student Information</h2>
+                
+                <div class="form-group">
+                    <label for="studentName">Full Name</label>
+                    <input type="text" id="studentName" placeholder="Enter your full name">
+                    <div class="error-message" id="nameError">Please enter your name</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subjectName">Subject Name</label>
+                    <input type="text" id="subjectName" placeholder="Enter the subject name">
+                    <div class="error-message" id="subjectError">Please enter the subject name</div>
+                </div>
+                
+                <div class="button-group">
+                    <div></div>
+                    <button class="btn-next" id="nextToStep2">
+                        <i class="fas fa-arrow-right"></i> Next Step
+                    </button>
+                </div>
+                
+                <!-- Disclaimer for Step 1 -->
+                <div class="disclaimer-section">
+                    <div class="disclaimer-title">Disclaimer:</div>
+                    <div class="disclaimer-text">
+                        This grade is a calculated estimate based on the scores you entered and should not be considered an official result. For official grades, please refer to your school's official grade report.
+                    </div>
+                    <div class="generated-by">Generated by English Program Grade Calculator</div>
+                    <div class="school-footer">Satri Nakhon Sawan School</div>
+                    <div class="purpose-note">This result is for informational purposes only</div>
+                </div>
+            </div>
+            
+            <!-- Step 2: Task Information -->
+            <div class="step" id="step2">
+                <h2 class="step-title">Task Information</h2>
+                
+                <div class="student-info">
+                    <div><span class="info-label">Student:</span> <span id="displayStudentName">-</span></div>
+                    <div><span class="info-label">Subject:</span> <span id="displaySubjectName">-</span></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="taskCount">Number of Tasks (1-10)</label>
+                    <input type="number" id="taskCount" min="1" max="10" placeholder="Enter number of tasks">
+                    <div class="error-message" id="taskCountError">Please enter a number between 1 and 10</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-prev" id="prevToStep1">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn-next" id="nextToStep3">
+                        <i class="fas fa-arrow-right"></i> Next Step
+                    </button>
+                </div>
+                
+                <!-- Disclaimer for Step 2 -->
+                <div class="disclaimer-section">
+                    <div class="disclaimer-title">Disclaimer:</div>
+                    <div class="disclaimer-text">
+                        This grade is a calculated estimate based on the scores you entered and should not be considered an official result. For official grades, please refer to your school's official grade report.
+                    </div>
+                    <div class="generated-by">Generated by English Program Grade Calculator</div>
+                    <div class="school-footer">Satri Nakhon Sawan School</div>
+                    <div class="purpose-note">This result is for informational purposes only</div>
+                </div>
+            </div>
+            
+            <!-- Step 3: Scores and Results -->
+            <div class="step" id="step3">
+                <h2 class="step-title">Enter Your Scores</h2>
+                
+                <div class="student-info">
+                    <div><span class="info-label">Student:</span> <span id="displayStudentName2">-</span></div>
+                    <div><span class="info-label">Subject:</span> <span id="displaySubjectName2">-</span></div>
+                    <div><span class="info-label">Tasks:</span> <span id="displayTaskCount">-</span></div>
+                </div>
+                
+                <div id="tasksContainer" class="tasks-container">
+                    <!-- Task inputs will be added here -->
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-prev" id="prevToStep2">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn-calculate" id="calculateBtn">
+                        <i class="fas fa-calculator"></i> Calculate Grade
+                    </button>
+                </div>
+                
+                <!-- Results Section -->
+                <div id="resultsSection" class="results-section">
+                    <h2 class="step-title" style="margin-top: 40px;">Your Results</h2>
+                    
+                    <div class="results-container">
+                        <div class="result-card">
+                            <div class="result-title">Overall Percentage</div>
+                            <div class="result-value" id="percentageResult">0%</div>
+                            <div>Your total score percentage</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-title">Final Grade</div>
+                            <div class="result-grade" id="gradeResult">0</div>
+                            <div>Based on English Program scale</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Task Results Table -->
+                    <h3 style="margin-top: 40px; color: #1a237e; text-align: center;">Individual Task Results</h3>
+                    <table class="task-results-table" id="taskResultsTable">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Task Name</th>
+                                <th>Obtained Score</th>
+                                <th>Total Score</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taskResultsBody">
+                            <!-- Task results will be added here -->
+                        </tbody>
+                    </table>
+                    
+                    <h3 style="margin-top: 40px; color: #1a237e; text-align: center;">Grade Reference Table</h3>
+                    <table class="grade-table" id="gradeTable">
+                        <thead>
+                            <tr>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gradeTableBody">
+                            <!-- Grade rows will be added here -->
+                        </tbody>
+                    </table>
+                    
+                    <div class="button-group" style="margin-top: 30px;">
+                        <button class="btn-prev" id="backToEntry">
+                            <i class="fas fa-arrow-left"></i> Back to Score Entry
+                        </button>
+                    </div>
+                    
+                    <!-- Disclaimer for Results Page -->
+                    <div class="disclaimer-section" style="margin-top: 40px;">
+                        <div class="disclaimer-title">Disclaimer:</div>
+                        <div class="disclaimer-text">
+                            This grade is a calculated estimate based on the scores you entered and should not be considered an official result. For official grades, please refer to your school's official grade report.
+                        </div>
+                        <div class="generated-by">Generated by English Program Grade Calculator</div>
+                        <div class="school-footer">Satri Nakhon Sawan School</div>
+                        <div class="purpose-note">This result is for informational purposes only</div>
+                    </div>
+                </div>
+                
+                <!-- Disclaimer for Score Entry Page -->
+                <div class="disclaimer-section" id="scoreEntryDisclaimer">
+                    <div class="disclaimer-title">Disclaimer:</div>
+                    <div class="disclaimer-text">
+                        This grade is a calculated estimate based on the scores you entered and should not be considered an official result. For official grades, please refer to your school's official grade report.
+                    </div>
+                    <div class="generated-by">Generated by English Program Grade Calculator</div>
+                    <div class="school-footer">Satri Nakhon Sawan School</div>
+                    <div class="purpose-note">This result is for informational purposes only</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        const tasksContainer = document.getElementById('tasksContainer');
+        const resultsSection = document.getElementById('resultsSection');
+        const gradeTableBody = document.getElementById('gradeTableBody');
+        const taskResultsBody = document.getElementById('taskResultsBody');
+        const scoreEntryDisclaimer = document.getElementById('scoreEntryDisclaimer');
+        
+        // Buttons
+        const nextToStep2Btn = document.getElementById('nextToStep2');
+        const prevToStep1Btn = document.getElementById('prevToStep1');
+        const nextToStep3Btn = document.getElementById('nextToStep3');
+        const prevToStep2Btn = document.getElementById('prevToStep2');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const backToEntryBtn = document.getElementById('backToEntry');
+        
+        // Display elements
+        const displayStudentName = document.getElementById('displayStudentName');
+        const displaySubjectName = document.getElementById('displaySubjectName');
+        const displayStudentName2 = document.getElementById('displayStudentName2');
+        const displaySubjectName2 = document.getElementById('displaySubjectName2');
+        const displayTaskCount = document.getElementById('displayTaskCount');
+        
+        // Result elements
+        const percentageResult = document.getElementById('percentageResult');
+        const gradeResult = document.getElementById('gradeResult');
+        
+        // Step indicators
+        const stepCircles = document.querySelectorAll('.step-circle');
+        const stepLines = document.querySelectorAll('.step-line');
+        
+        // Grade scale (English Program)
+        const gradeScale = [
+            { min: 80, grade: 4.0, description: "Excellent" },
+            { min: 75, max: 79.99, grade: 3.5, description: "Very Good" },
+            { min: 70, max: 74.99, grade: 3.0, description: "Good" },
+            { min: 65, max: 69.99, grade: 2.5, description: "Above Average" },
+            { min: 60, max: 64.99, grade: 2.0, description: "Average" },
+            { min: 55, max: 59.99, grade: 1.5, description: "Below Average" },
+            { min: 50, max: 54.99, grade: 1.0, description: "Pass" },
+            { min: 0, max: 49.99, grade: 0, description: "Fail" }
+        ];
+        
+        // Variables
+        let taskScores = [];
+        let calculatedPercentage = 0;
+        let calculatedGrade = 0;
+        let taskNames = [];
+        
+        // Initialize the app
+        function initApp() {
+            // Initialize grade table
+            initializeGradeTable();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Generate initial task container message
+            tasksContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">Enter the number of tasks in Step 2 to generate score inputs</p>';
+        }
+        
+        // Initialize grade table
+        function initializeGradeTable() {
+            gradeTableBody.innerHTML = '';
+            
+            gradeScale.forEach(item => {
+                const row = document.createElement('tr');
+                
+                let rangeText;
+                if (item.min === 80) {
+                    rangeText = "≥ 80%";
+                } else if (item.max) {
+                    rangeText = `${item.min}% - ${item.max}%`;
+                } else {
+                    rangeText = "< 50%";
+                }
+                
+                row.innerHTML = `
+                    <td>${rangeText}</td>
+                    <td>${item.grade}</td>
+                    <td>${item.description}</td>
+                `;
+                
+                gradeTableBody.appendChild(row);
+            });
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            // Step navigation
+            nextToStep2Btn.addEventListener('click', goToStep2);
+            prevToStep1Btn.addEventListener('click', () => showStep(1));
+            nextToStep3Btn.addEventListener('click', goToStep3);
+            prevToStep2Btn.addEventListener('click', () => showStep(2));
+            
+            // Task count input
+            document.getElementById('taskCount').addEventListener('input', generateTaskInputs);
+            
+            // Calculate button
+            calculateBtn.addEventListener('click', calculateResults);
+            
+            // Back to entry button
+            backToEntryBtn.addEventListener('click', () => {
+                resultsSection.style.display = 'none';
+                scoreEntryDisclaimer.style.display = 'block';
+            });
+        }
+        
+        // Go to step 2
+        function goToStep2() {
+            if (validateStep1()) {
+                const studentName = document.getElementById('studentName').value.trim();
+                const subjectName = document.getElementById('subjectName').value.trim();
+                
+                displayStudentName.textContent = studentName;
+                displaySubjectName.textContent = subjectName;
+                displayStudentName2.textContent = studentName;
+                displaySubjectName2.textContent = subjectName;
+                
+                showStep(2);
+            }
+        }
+        
+        // Go to step 3
+        function goToStep3() {
+            if (validateStep2()) {
+                generateTaskInputs();
+                showStep(3);
+            }
+        }
+        
+        // Show specific step
+        function showStep(stepNumber) {
+            // Hide all steps
+            step1.classList.remove('active');
+            step2.classList.remove('active');
+            step3.classList.remove('active');
+            
+            // Show the requested step
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+            
+            // Update step indicator
+            updateStepIndicator(stepNumber);
+            
+            // Scroll to top
+            document.querySelector('.content').scrollTop = 0;
+        }
+        
+        // Update step indicator
+        function updateStepIndicator(currentStep) {
+            stepCircles.forEach((circle, index) => {
+                circle.classList.remove('active');
+                if (index + 1 === currentStep) {
+                    circle.classList.add('active');
+                }
+            });
+            
+            stepLines.forEach((line, index) => {
+                line.classList.remove('active');
+                if (index + 1 < currentStep) {
+                    line.classList.add('active');
+                }
+            });
+        }
+        
+        // Validate step 1
+        function validateStep1() {
+            const studentName = document.getElementById('studentName').value.trim();
+            const subjectName = document.getElementById('subjectName').value.trim();
+            let isValid = true;
+            
+            // Reset errors
+            document.getElementById('nameError').style.display = 'none';
+            document.getElementById('subjectError').style.display = 'none';
+            
+            if (!studentName) {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!subjectName) {
+                document.getElementById('subjectError').style.display = 'block';
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Validate step 2
+        function validateStep2() {
+            const taskCount = parseInt(document.getElementById('taskCount').value);
+            let isValid = true;
+            
+            if (isNaN(taskCount) || taskCount < 1 || taskCount > 10) {
+                document.getElementById('taskCountError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('taskCountError').style.display = 'none';
+            }
+            
+            return isValid;
+        }
+        
+        // Generate task inputs
+        function generateTaskInputs() {
+            const taskCount = parseInt(document.getElementById('taskCount').value) || 0;
+            
+            if (taskCount < 1 || taskCount > 10) {
+                tasksContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">Please enter a valid number of tasks (1-10) in Step 2</p>';
+                displayTaskCount.textContent = '-';
+                return;
+            }
+            
+            tasksContainer.innerHTML = '';
+            displayTaskCount.textContent = taskCount;
+            
+            for (let i = 1; i <= taskCount; i++) {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task-item';
+                taskItem.innerHTML = `
+                    <div class="task-title">Task ${i}</div>
+                    <div class="score-inputs">
+                        <div>
+                            <label for="taskName${i}">Task Name</label>
+                            <input type="text" id="taskName${i}" class="task-name" placeholder="Enter task name">
+                        </div>
+                        <div>
+                            <label for="obtained${i}">Obtained Score</label>
+                            <input type="number" id="obtained${i}" class="obtained-score" min="0" placeholder="Your score">
+                        </div>
+                        <div>
+                            <label for="total${i}">Total Score</label>
+                            <input type="number" id="total${i}" class="total-score" min="1" placeholder="Maximum score">
+                        </div>
+                    </div>
+                `;
+                tasksContainer.appendChild(taskItem);
+            }
+        }
+        
+        // Calculate results
+        function calculateResults() {
+            const taskCount = parseInt(document.getElementById('taskCount').value);
+            
+            if (!validateTaskScores(taskCount)) {
+                alert("Please check your scores. All fields must be filled. Also, obtained score cannot be higher than total score.");
+                return;
+            }
+            
+            let totalObtained = 0;
+            let totalPossible = 0;
+            taskScores = [];
+            taskNames = [];
+            
+            // Calculate totals and individual task grades
+            for (let i = 1; i <= taskCount; i++) {
+                const taskNameInput = document.getElementById(`taskName${i}`);
+                const obtainedInput = document.getElementById(`obtained${i}`);
+                const totalInput = document.getElementById(`total${i}`);
+                
+                if (!taskNameInput || !obtainedInput || !totalInput) continue;
+                
+                const taskNameVal = taskNameInput.value.trim();
+                const obtainedVal = obtainedInput.value.trim();
+                const totalVal = totalInput.value.trim();
+                
+                // All fields must be filled
+                if (taskNameVal === '' || obtainedVal === '' || totalVal === '') {
+                    alert(`Please fill all fields for Task ${i}`);
+                    return;
+                }
+                
+                const obtained = parseFloat(obtainedVal);
+                const total = parseFloat(totalVal);
+                
+                totalObtained += obtained;
+                totalPossible += total;
+                
+                // Calculate task percentage and grade
+                const taskPercentage = total > 0 ? (obtained / total) * 100 : 0;
+                const taskGrade = calculateGradeFromPercentage(taskPercentage);
+                
+                taskScores.push({
+                    task: i,
+                    name: taskNameVal,
+                    obtained: obtained,
+                    total: total,
+                    percentage: total > 0 ? taskPercentage.toFixed(2) + '%' : '0%',
+                    grade: taskGrade.toFixed(1)
+                });
+                
+                taskNames.push(taskNameVal);
+            }
+            
+            // Calculate overall percentage
+            calculatedPercentage = totalPossible > 0 ? (totalObtained / totalPossible) * 100 : 0;
+            
+            // Calculate overall grade
+            calculatedGrade = calculateGradeFromPercentage(calculatedPercentage);
+            
+            // Display overall results
+            percentageResult.textContent = `${calculatedPercentage.toFixed(2)}%`;
+            gradeResult.textContent = calculatedGrade.toFixed(1);
+            
+            // Display individual task results
+            displayTaskResults();
+            
+            // Highlight grade in table
+            highlightGradeInTable();
+            
+            // Show results section and hide score entry disclaimer
+            resultsSection.style.display = 'block';
+            scoreEntryDisclaimer.style.display = 'none';
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Display individual task results
+        function displayTaskResults() {
+            taskResultsBody.innerHTML = '';
+            
+            if (taskScores.length === 0) {
+                taskResultsBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px; color: #666;">
+                            No scores entered
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            taskScores.forEach(score => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>Task ${score.task}</td>
+                    <td>${score.name}</td>
+                    <td>${score.obtained}</td>
+                    <td>${score.total}</td>
+                    <td>${score.percentage}</td>
+                    <td>${score.grade}</td>
+                `;
+                taskResultsBody.appendChild(row);
+            });
+        }
+        
+        // Calculate grade from percentage
+        function calculateGradeFromPercentage(percentage) {
+            for (const item of gradeScale) {
+                if (item.min === 80 && percentage >= 80) {
+                    return item.grade;
+                } else if (item.max && percentage >= item.min && percentage <= item.max) {
+                    return item.grade;
+                } else if (item.min === 0 && percentage < 50) {
+                    return item.grade;
+                }
+            }
+            return 0;
+        }
+        
+        // Validate task scores
+        function validateTaskScores(taskCount) {
+            // Reset error styling
+            for (let i = 1; i <= taskCount; i++) {
+                const taskNameInput = document.getElementById(`taskName${i}`);
+                const obtainedInput = document.getElementById(`obtained${i}`);
+                const totalInput = document.getElementById(`total${i}`);
+                
+                if (taskNameInput && obtainedInput && totalInput) {
+                    taskNameInput.style.borderColor = '';
+                    obtainedInput.style.borderColor = '';
+                    totalInput.style.borderColor = '';
+                }
+            }
+            
+            for (let i = 1; i <= taskCount; i++) {
+                const taskNameInput = document.getElementById(`taskName${i}`);
+                const obtainedInput = document.getElementById(`obtained${i}`);
+                const totalInput = document.getElementById(`total${i}`);
+                
+                if (!taskNameInput || !obtainedInput || !totalInput) continue;
+                
+                const taskNameVal = taskNameInput.value.trim();
+                const obtainedVal = obtainedInput.value.trim();
+                const totalVal = totalInput.value.trim();
+                
+                // Check if any field is empty
+                if (taskNameVal === '' || obtainedVal === '' || totalVal === '') {
+                    taskNameInput.style.borderColor = '#f44336';
+                    obtainedInput.style.borderColor = '#f44336';
+                    totalInput.style.borderColor = '#f44336';
+                    return false;
+                }
+                
+                const obtained = parseFloat(obtainedVal);
+                const total = parseFloat(totalVal);
+                
+                // Validate numbers
+                if (isNaN(obtained) || obtained < 0) {
+                    obtainedInput.style.borderColor = '#f44336';
+                    return false;
+                }
+                
+                if (isNaN(total) || total <= 0) {
+                    totalInput.style.borderColor = '#f44336';
+                    return false;
+                }
+                
+                if (obtained > total) {
+                    obtainedInput.style.borderColor = '#f44336';
+                    totalInput.style.borderColor = '#f44336';
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        // Highlight grade in table
+        function highlightGradeInTable() {
+            const rows = gradeTableBody.querySelectorAll('tr');
+            
+            // Remove previous highlights
+            rows.forEach(row => row.classList.remove('highlight'));
+            
+            // Find and highlight the correct row
+            for (let i = 0; i < gradeScale.length; i++) {
+                const item = gradeScale[i];
+                if (item.min === 80 && calculatedPercentage >= 80) {
+                    rows[i].classList.add('highlight');
+                    break;
+                } else if (item.max && calculatedPercentage >= item.min && calculatedPercentage <= item.max) {
+                    rows[i].classList.add('highlight');
+                    break;
+                } else if (item.min === 0 && calculatedPercentage < 50) {
+                    rows[i].classList.add('highlight');
+                    break;
+                }
+            }
+        }
+        
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
